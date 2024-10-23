@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 Box e 4 Bottoni</title>
+    <style>
+        .box {
+            width: 300px;
+            height: 30px;
+            margin: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <input type="text" id="box1" class="box" placeholder="Box 1">
+        <button class="button" onclick="writeInBox(1, 'Ciao mi chiamo Davide')">Scrivi in Box 1</button>
+    </div>
+
+    <div>
+        <input type="text" id="box2" class="box" placeholder="Box 2">
+        <button class="button" onclick="writeInBox(2, 'Ho 16 anni e frequento la 3° liceo scientifico')">Scrivi in Box 2</button>
+    </div>
+
+    <div>
+        <input type="text" id="box3" class="box" placeholder="Box 3">
+        <button class="button" onclick="writeInBox(3, 'Le mie materie preferite sono storia e inglese')">Scrivi in Box 3</button>
+    </div>
+
+    <div>
+        <input type="text" id="box4" class="box" placeholder="Box 4">
+        <button class="button" onclick="writeInBox(4, 'La mia più grande passione è il calcio')">Scrivi in Box 4</button>
+    </div>
+
+    <script>
+        function writeInBox(boxNumber, text) {
+            document.getElementById(`box${boxNumber}`).value = text;
+        }
+    </script>
+
+</body>
+</html>
+

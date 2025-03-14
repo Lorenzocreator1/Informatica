@@ -7,10 +7,104 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #f0f8ff;
       margin: 0;
       padding: 0;
+      text-align: center;
     }
     .container {
       width: 80%;
-      margin
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1 {
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 18px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .result {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Calcola il Dislivello del Tuo Trekking</h1>
+
+    <!-- Form per inserire le altezze -->
+    <div>
+      <label for="partenza">Altezza Punto di Partenza (in metri):</label>
+      <input type="number" id="partenza" placeholder="Inserisci altezza di partenza">
+
+      <label for="pausa">Altezza Punto di Pausa (in metri):</label>
+      <input type="number" id="pausa" placeholder="Inserisci altezza di pausa">
+
+      <label for="arrivo">Altezza Punto di Arrivo (in metri):</label>
+      <input type="number" id="arrivo" placeholder="Inserisci altezza di arrivo">
+
+      <button onclick="calcolaDislivello()">Calcola Dislivello</button>
+    </div>
+
+    <!-- Sezione per visualizzare il risultato -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calcolaDislivello() {
+      // Ottieni le altezze inserite
+      const partenza = parseFloat(document.getElementById('partenza').value);
+      const pausa = parseFloat(document.getElementById('pausa').value);
+      const arrivo = parseFloat(document.getElementById('arrivo').value);
+
+      // Verifica che tutti i campi siano riempiti
+      if (isNaN(partenza) || isNaN(pausa) || isNaN(arrivo)) {
+        alert("Per favore, inserisci tutte le altezze.");
+        return;
+      }
+
+      // Calcola il dislivello totale
+      const dislivello = Math.abs(partenza - arrivo) + Math.abs(pausa - arrivo);
+
+      // Visualizza i dati e il dislivello
+      document.getElementById('result').innerHTML = `
+        <p><strong>Altezza Punto di Partenza:</strong> ${partenza} metri</p>
+        <p><strong>Altezza Punto di Pausa:</strong> ${pausa} metri</p>
+        <p><strong>Altezza Punto di Arrivo:</strong> ${arrivo} metri</p>
+        <p><strong>Dislivello Totale:</strong> ${dislivello} metri</p>
+      `;
+    }
+  </script>
+
+</body>
+</html>

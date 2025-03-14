@@ -3,99 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contatore Decrementale</title>
+  <title>Contatore e Calcolo Differenze</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
+      background-color: #f4f4f4;
       margin: 0;
       padding: 0;
       text-align: center;
     }
     .container {
-      margin-top: 50px;
+      width: 80%;
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
     }
-    .counter {
-      font-size: 40px;
-      font-weight: bold;
+    h1 {
       color: #333;
     }
-    .button {
-      padding: 15px 25px;
-      font-size: 18px;
-      cursor: pointer;
-      margin-top: 30px;
-      background-color: #2ecc71;
+    .countdown {
+      font-size: 50px;
+      color: #e74c3c;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #3498db;
       color: white;
+      padding: 12px 25px;
       border: none;
       border-radius: 5px;
-      display: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
     }
-    .button:hover {
-      background-color: #27ae60;
+    button:hover {
+      background-color: #2980b9;
     }
     .result {
       margin-top: 30px;
       font-size: 18px;
       color: #333;
     }
-    .final-result {
-      margin-top: 40px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #e74c3c;
-    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>Contatore Decrementale da 100</h1>
-    <div id="counter" class="counter">100.00</div>
-    <button id="pressButton" class="button" onclick="recordTime()">Premi qui!</button>
+    <h1>Contatore Decrementale con Calcolo Differenze</h1>
+
+    <div class="countdown" id="countdown">100.00</div>
+    <button onclick="registerTime()">Premi quando il contatore raggiunge i multipli di 10</button>
+
     <div class="result" id="result"></div>
-    <div class="final-result" id="finalResult"></div>
+
+    <div class="summary">
+      <p><strong>Somma delle differenze:</strong> <span id="total-difference">0.00</span> secondi</p>
+    </div>
   </div>
 
   <script>
-    let currentTime = 100.00;  // Tempo iniziale
-    let differences = [];  // Array per memorizzare le differenze
-    let idealTimes = [90, 80, 70, 60, 50, 40, 30, 20, 10];  // Tempi ottimali per premere il bottone
-    let buttonClicked = false;  // Flag per monitorare se il bottone è stato premuto
+    let count = 100.00;
+    let interval;
+    let totalDifference = 0;
 
-    // Funzione per avviare il contatore decrementale
+    const countdownElement = document.getElementById('countdown');
+    const resultElement = document.getElementById('result');
+    const totalDifferenceElement = document.getElementById('total-difference');
+
+    // Funzione per avviare il countdown
     function startCountdown() {
-      const counter = document.getElementById('counter');
-      const pressButton = document.getElementById('pressButton');
-      
-      // Mostra il bottone quando il contatore è pronto
-      pressButton.style.display = 'block';
-      
-      const interval = setInterval(function() {
-        currentTime = (Math.round((currentTime - 0.01) * 100) / 100);  // Decrementa di 0.01 ogni intervallo
-        counter.innerText = currentTime.toFixed(2);
+      interval = setInterval(() => {
+        count -= 0.01; // Decrementa di 0.01 ogni centesimo di secondo
+        countdownElement.textContent = count.toFixed(2);
 
-        // Verifica se il contatore raggiunge un valore ideale per il bottone
-        if (idealTimes.includes(Math.floor(currentTime))) {
-          pressButton.style.display = 'block';
+        if (count <= 0) {
+          clearInterval(interval); // Ferma il contatore quando arriva a 0
         }
-
-        if (currentTime <= 0) {
-          clearInterval(interval);  // Ferma il contatore quando raggiunge 0
-          pressButton.style.display = 'none';
-        }
-      }, 10);  // Aggiorna ogni 10 millisecondi
+      }, 10); // Intervallo di 10 millisecondi per aggiornare ogni 0.01 secondi
     }
 
-    // Funzione per registrare il tempo quando il bottone viene premuto
-    function recordTime() {
-      if (!buttonClicked) {
-        buttonClicked = true;
-        
-        const pressTime = currentTime;  // Tempo al momento del click
-        const idealTime = idealTimes.pop();  // Prendi l'ultimo valore ideale (es. 90, 80, 70...)
+    // Funzione per registrare il tempo e calcolare la differenza
+    function registerTime() {
+      const timeOptimal = Math.floor(count);
+      const timeElapsed = count;
+      const difference = Math.abs(timeOptimal - timeElapsed).toFixed(2); // Calcola la differenza tra il tempo ottimale e il tempo trascorso
 
-        const difference = Math.abs(idealTime - pressTime);  // Calcola la differenza tra il tempo ideale e quello reale
-        differences.push(difference);  // Aggiungi la differenza all'array
+      resultElement.innerHTML = `Hai premuto il bottone quando il contatore era a ${timeOptimal}s.<br>Il tuo tempo è stato di ${timeElapsed.toFixed(2)}s.<br>La differenza è di ${difference}s.`;
 
-        // Mostra la diff
+      totalDifference += parseFloat(difference); // Somma la differenza
+      totalDifferenceElement.textContent = totalDifference.toFixed(2); // Aggiorna la somma delle differenze
+    }
+
+    // Avvia il contatore all'avvio della pagina
+    window.onload = startCountdown;
+  </script>
+
+</body>
+</html>

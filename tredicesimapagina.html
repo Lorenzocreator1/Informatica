@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcolo Età</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .container {
+      width: 80%;
+      max-width: 500px;
+      margin: 50px auto;
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1 {
+      color: #333;
+    }
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .result {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Calcola il Tuo Tempo di Vita</h1>
+
+    <!-- Form per inserire il nome e la data di nascita -->
+    <div>
+      <label for="name">Inserisci il tuo nome:</label>
+      <input type="text" id="name" placeholder="Nome">
+
+      <label for="birthdate">Inserisci la tua data di nascita:</label>
+      <input type="date" id="birthdate">
+
+      <button onclick="calcolaTempoVita()">Calcola Tempo di Vita</button>
+    </div>
+
+    <!-- Sezione per visualizzare il risultato -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calcolaTempoVita() {
+      // Ottieni il nome e la data di nascita dall'input
+      const nome = document.getElementById('name').value;
+      const dataNascita = document.getElementById('birthdate').value;
+
+      // Verifica che i dati siano stati inseriti
+      if (!nome || !dataNascita) {
+        alert("Per favore, inserisci sia il tuo nome che la tua data di nascita.");
+        return;
+      }
+
+      // Crea un oggetto Date per la data di nascita
+      const nascita = new Date(dataNascita);
+      const oggi = new Date();
+
+      // Calcola la differenza in millisecondi
+      const diffInMillisecondi = oggi - nascita;
+
+      // Calcola la differenza in giorni, ore e secondi
+      const giorni = Math.floor(diffInMillisecondi / (1000 * 60 * 60 * 24));
+      const ore = Math.floor(diffInMillisecondi / (1000 * 60 * 60));
+      const secondi = Math.floor(diffInMillisecondi / 1000);
+
+      // Visualizza il risultato
+      document.getElementById('result').innerHTML = `
+        <p>Ciao, ${nome}!</p>
+        <p>Hai vissuto:</p>
+        <p><strong>${giorni}</strong> giorni</p>
+        <p><strong>${ore}</strong> ore</p>

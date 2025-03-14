@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Morra</title>
+</head>
+<body>
+    <p>Definizione di array: Una struttura dati composta da elementi omogenei tra loro (numerici, oggetti o altre strutture dati).</p>
+    <p id="out1"></p>
+
+    <script>
+        const arrymorra = ["sasso", "mano", "forbice"];
+
+        // Funzione che restituisce l'elemento in base all'indice
+        function getElement(indice) {
+            if (indice < 0 || indice >= arrymorra.length) {
+                return "Indice non valido"; // Gestione dell'indice fuori limite
+            }
+            return arrymorra[indice]; // Restituisce l'elemento corrispondente
+        }
+
+        // Primo elemento (indice 0)
+        const primoElemento = getElement(0);
+        
+        // Ultimo elemento (indice arrymorra.length - 1)
+        const ultimoElemento = getElement(arrymorra.length - 1);
+        
+        // Un elemento che non esiste (indice fuori limite)
+        const elementoNonEsistente = getElement(5); // Indice fuori limite
+
+        // Mostra i risultati
+        document.getElementById("out1").innerHTML = `
+            Primo elemento: ${primoElemento} <br>
+            Ultimo elemento: ${ultimoElemento} <br>
+            Un elemento che non esiste (indice 5): ${elementoNonEsistente}
+        `;
+    </script>
+</body>
+</html>

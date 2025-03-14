@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcola lunghezza e operazioni stringhe</title>
+    <script>
+        // Funzione 1: Calcola la lunghezza della stringa
+        function calcolaLunghezza() {
+            let inputA = document.getElementById('stringaA').value;
+            let inputB = document.getElementById('stringaB').value;
+
+            // Calcola e visualizza la lunghezza delle stringhe
+            document.getElementById('lunghezzaA').innerText = "Lunghezza Stringa A: " + inputA.length;
+            document.getElementById('lunghezzaB').innerText = "Lunghezza Stringa B: " + inputB.length;
+        }
+
+        // Funzione 2: Restituisce la stringa al contrario
+        function stringaContraria() {
+            let inputA = document.getElementById('stringaA').value;
+            let inputB = document.getElementById('stringaB').value;
+
+            // Restituisce la stringa al contrario
+            document.getElementById('contrariaA').innerText = "Stringa A al contrario: " + inputA.split('').reverse().join('');
+            document.getElementById('contrariaB').innerText = "Stringa B al contrario: " + inputB.split('').reverse().join('');
+        }
+
+        // Funzione 3: Unisce le due stringhe
+        function unisciStringhe() {
+            let inputA = document.getElementById('stringaA').value;
+            let inputB = document.getElementById('stringaB').value;
+
+            // Unisce le due stringhe
+            document.getElementById('unione').innerText = "Unione delle due stringhe: " + inputA + inputB;
+        }
+
+        // Funzione 4: Calcola la somma delle lunghezze delle due stringhe e segnala se la lunghezza della B è maggiore di 20
+        function sommaLunghezze() {
+            let inputA = document.getElementById('stringaA').value;
+            let inputB = document.getElementById('stringaB').value;
+
+            // Calcola la somma delle lunghezze
+            let somma = inputA.length + inputB.length;
+            document.getElementById('sommaLunghezze').innerText = "Somma delle lunghezze: " + somma;
+
+            // Controlla se la stringa B è troppo lunga
+            if (inputB.length > 20) {
+                document.getElementById('lunghezzaBCheck').innerText = "B troppo lunga!";
+            } else {
+                document.getElementById('lunghezzaBCheck').innerText = "";
+            }
+        }
+
+        // Funzione che esegue tutte le operazioni
+        function eseguiOperazioni() {
+            calcolaLunghezza();
+            stringaContraria();
+            unisciStringhe();
+            sommaLunghezze();
+        }
+    </script>
+</head>
+<body>
+    <h1>Operazioni sulle Stringhe</h1>
+
+    <form onsubmit="event.preventDefault(); eseguiOperazioni();">
+        <label for="stringaA">Stringa A:</label>
+        <input type="text" id="stringaA" required><br><br>
+
+        <label for="stringaB">Stringa B:</label>
+        <input type="text" id="stringaB" required><br><br>
+
+        <button type="submit">Esegui Operazioni</button>
+    </form>
+
+    <div id="risultati">
+        <p id="lunghezzaA"></p>
+        <p id="lunghezzaB"></p>
+        <p id="contrariaA"></p>
+        <p id="contrariaB"></p>
+        <p id="unione"></p>
+        <p id="sommaLunghezze"></p>
+        <p id="lunghezzaBCheck"></p>
+    </div>
+</body>
+</html>

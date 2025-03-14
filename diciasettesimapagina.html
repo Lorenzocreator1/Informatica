@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisi Numerica con Array</title>
+</head>
+<body>
+
+    <h1>Analisi Numerica con Array</h1>
+    <p>Lista generata:</p>
+    <p id="out1"></p>
+
+    <script>
+        // array visibile a tutto lo script
+        let numeri = [];
+
+        // Funzione per inserire un numero casuale nell'array
+        function InserisceNumeroCasuale(i) {    
+            let NumeroCausale = Math.floor(Math.random() * 100); // Genera un numero casuale tra 0 e 99
+            numeri[i] = NumeroCausale;    
+        }
+
+        // Genera 1000 numeri casuali e li inserisce nell'array
+        for (let i = 0; i < 1000; i++) {
+            InserisceNumeroCasuale(i);
+        }
+
+        // Stampa l'array dei numeri casuali nell'elemento con id "out1"
+        document.getElementById("out1").innerHTML = numeri.join(', ');  // Unisce gli elementi dell'array in una stringa separata da virgola
+
+        // Funzione per verificare se un numero è primo
+        function isPrime(n) {  
+            let prime = true;
+
+            // Verifica se il numero è divisibile per un altro numero
+            for (let i = 2; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) {
+                    prime = false;
+                    break; // Esce dal ciclo non appena trova un divisore
+                }
+            }
+            return prime;
+        }
+
+        // Test della funzione isPrime
+        console.log(isPrime(11)); // Esempio: verifica se 11 è primo
+    </script>
+
+</body>
+</html>

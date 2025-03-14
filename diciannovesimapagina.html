@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punto Grafico</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    canvas {
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas" width="500" height="500"></canvas>
+
+  <script>
+    // Ottieni il riferimento al canvas e al suo contesto di rendering
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Funzione per disegnare un punto
+    function drawPoint(x, y, radius, color) {
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2); // Crea un cerchio (punto)
+      ctx.fillStyle = color; // Imposta il colore
+      ctx.fill(); // Riempi il cerchio con il colore
+      ctx.closePath(); // Chiudi il percorso
+    }
+
+    // Disegna un punto iniziale al centro del canvas
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const pointRadius = 5;
+    const pointColor = 'red';
+    drawPoint(centerX, centerY, pointRadius, pointColor);
+
+    // Aggiungi un evento per disegnare punti con il mouse
+    canvas.addEventListener('click', function(event) {
+      const mouseX = event.offsetX; // Ottieni la posizione X del clic
+      const mouseY = event.offsetY; // Ottieni la posizione Y del clic
+
+      // Disegna un punto rosso dove è stato cliccato
+      drawPoint(mouseX, mouseY, pointRadius, pointColor);
+    });
+  </script>
+</body>
+</html>

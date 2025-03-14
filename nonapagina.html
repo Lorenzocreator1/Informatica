@@ -4,12 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown con Link</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 3em;
+            color: #333;
+            background: #ff7f50;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 120px;
+            margin-bottom: 20px;
+        }
+        #link a {
+            font-size: 1.5em;
+            color: white;
+            background-color: #28a745;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+        #link a:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
 
 <h1 id="countdown">10</h1>
 <div id="link" style="display: none;">
-    <a href="https://www.youtube.com/watch?v=uOb7YdfuR2U target="_blank">Vai al link</a>
+    <a href="https://www.youtube.com/watch?v=uOb7YdfuR2U" target="_blank">Vai al link</a>
 </div>
 
 <script>
@@ -31,4 +64,3 @@
 
 </body>
 </html>
-Area degli allegati

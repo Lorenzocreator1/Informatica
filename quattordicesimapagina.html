@@ -1,43 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Array1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        h1 {
+            color: #007BFF;
+        }
+
+        p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #out1 {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            word-wrap: break-word;
+        }
+    </style>
 </head>
 <body>
-   
-<p>  Definizione di array
-   Una struttura dati composta da elementi omogenei tra loro
-   (numerici, oggetti o altre strutture dati)
-</p>
 
-<p>
-    Esempio stampa di 10 elementi casuali dell'array
-</p>
+    <div class="container">
+        <h1>Generatore di Sequenza Casuale</h1>
+        <p>Premi il bottone per generare 10 elementi casuali dall'array.</p>
 
-<p id="out1"></p>
+        <!-- Bottone per generare la sequenza casuale -->
+        <button onclick="generaSequenza()">Genera Sequenza Casuale</button>
 
-<script>
+        <p id="out1"></p>
+    </div>
 
-    const arrymorra = ["sasso", "mano", "forbice"]; // L'array
+    <script>
+        const arrymorra = ["sasso", "mano", "forbice"]; // L'array
 
-    let tiro = -1;
+        // Funzione che genera la sequenza casuale e la stampa
+        function generaSequenza() {
+            let sequenza = ""; // Inizializziamo una stringa vuota
 
-    // Stampa 10 elementi casuali
-    for (let i = 0; i < 10; i++) {
-        tiro = numeroCasuale();
-        document.getElementById("out1").innerHTML += arrymorra[tiro] + " ";
-    }
+            // Genera 10 elementi casuali
+            for (let i = 0; i < 10; i++) {
+                const tiro = numeroCasuale(); // Numero casuale tra 0 e 2
+                sequenza += arrymorra[tiro] + " "; // Aggiungi l'elemento alla sequenza
+            }
 
-    // Funzione per generare numeri casuali tra 0 e 2
-    function numeroCasuale() {
-        return Math.floor(Math.random() * 3); // Restituisce un numero tra 0 e 2
-    }
+            // Mostra la sequenza generata nell'elemento con id="out1"
+            document.getElementById("out1").innerHTML = sequenza;
+        }
 
-</script>
+        // Funzione per generare numeri casuali tra 0 e 2
+        function numeroCasuale() {
+            return Math.floor(Math.random() * 3); // Restituisce un numero tra 0 e 2
+        }
+    </script>
 
 </body>
 </html>
-
-

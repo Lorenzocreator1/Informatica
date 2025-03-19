@@ -3,26 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Array di Numeri Casuali</title>
+    <title>Numeri Primi e Fattori</title>
 </head>
 <body>
 
-<h1>Array con 1000 numeri casuali</h1>
-<pre id="output"></pre>
+<h1>Numeri Primi da 0 a 1000</h1>
+<div id="primi"></div>
+
+<h1>Numeri Non Primi con Fattori</h1>
+<div id="non-primi"></div>
 
 <script>
-    // Funzione per generare un array di 1000 numeri casuali
-    function generateRandomArray() {
-        const arr = [];
-        for (let i = 0; i < 1000; i++) {
-            arr.push(Math.floor(Math.random() * 100) + 1); // Numeri casuali tra 1 e 100
+    // Funzione per determinare se un numero è primo
+    function isPrime(num) {
+        if (num <= 1) return false;
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) return false;
         }
-        return arr;
+        return true;
     }
 
-    // Mostra l'array nell'elemento con id "output"
-    document.getElementById('output').textContent = JSON.stringify(generateRandomArray(), null, 2);
+    // Funzione per trovare i fattori di un numero
+    function getFactors(num) {
+        let factors = [];
+        for (let i = 1; i <= num; i++) {
+            if (num % i === 0) factors.push(i);
+        }
+        return factors;
+    }
+
+    // Trova e mostra numeri primi e numeri non primi con fattori
+    function displayNumbers() {
+        let primi = [];
+        let nonPrimi = [];
+
+        for (let i = 0; i <= 1000; i++) {
+            if (isPrime(i)) {
+                primi.push(i);
+            } else {
+                nonPrimi.push({ num: i, fattori: getFactors(i) });
+            }
+        }
+
+        // Mostra i numeri primi
+        document.getElementById('primi').textContent = "Numeri Primi: " + primi.join(", ");
+
+        // Mostra i numeri non primi con i loro fattori
+        let nonPrimiText = nonPrimi.map(item => `${item.num}: ${item.fattori.join(", ")}`).join("<br>");
+        document.getElementById('non-primi').innerHTML = nonPrimiText;
+    }
+
+    // Esegui la funzione al caricamento della pagina
+    displayNumbers();
 </script>
 
 </body>
 </html>
+

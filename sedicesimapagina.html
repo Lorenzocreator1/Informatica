@@ -64,6 +64,7 @@
             // Selezioniamo un indice casuale dall'array articoliDisponibili
             const indiceCasuale = Math.floor(Math.random() * articoliDisponibili.length);
             const articoloCasuale = articoliDisponibili[indiceCasuale];
+            console.log("Aggiungendo articolo:", articoloCasuale);  // Debug: mostra l'articolo aggiunto
 
             // Aggiungiamo l'articolo alla lista con push()
             listaDellaSpesa.push(articoloCasuale);
@@ -94,6 +95,13 @@
                 li.textContent = articolo;
                 listaUl.appendChild(li);
             });
+
+            // Aggiungi un messaggio nel caso la lista sia vuota
+            if (listaDellaSpesa.length === 0) {
+                let li = document.createElement("li");
+                li.textContent = "La lista è vuota";
+                listaUl.appendChild(li);
+            }
         }
     </script>
 

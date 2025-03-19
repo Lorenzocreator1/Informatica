@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestione Lista della Spesa Casuale</title>
+    <title>Gestione Lista della Spesa</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,37 +38,41 @@
         .remove-btn:hover {
             background-color: #e53935;
         }
+        .random-btn {
+            background-color: #2196F3;
+        }
+        .random-btn:hover {
+            background-color: #1e88e5;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Lista della Spesa Casuale</h1>
+    <h1>Lista della Spesa</h1>
     <ul id="listaSpesa"></ul>
 
     <div>
-        <button onclick="aggiungiArticoloCasuale()">Aggiungi Articolo Casuale</button>
+        <button onclick="aggiungiArticolo()">Aggiungi Articolo</button>
         <button onclick="rimuoviArticolo()">Rimuovi Ultimo Articolo</button>
+        <button class="random-btn" onclick="selezionaArticoloCasuale()">Seleziona Articolo Casuale</button>
     </div>
 
     <script>
-        // Array di articoli possibili
-        const articoliDisponibili = [
-            "Pane", "Latte", "Uova", "Mele", "Banane", "Carote", "Pasta", "Riso", "Pomodori", "Formaggio"
-        ];
-
-        // Array della lista della spesa
+        // Creazione di un array vuoto per la lista della spesa
         let listaDellaSpesa = [];
 
-        // Funzione per aggiungere un articolo casuale alla lista
-        function aggiungiArticoloCasuale() {
-            // Selezioniamo un indice casuale dall'array articoliDisponibili
-            const indiceCasuale = Math.floor(Math.random() * articoliDisponibili.length);
-            const articoloCasuale = articoliDisponibili[indiceCasuale];
-            console.log("Aggiungendo articolo:", articoloCasuale);  // Debug: mostra l'articolo aggiunto
-
-            // Aggiungiamo l'articolo alla lista con push()
-            listaDellaSpesa.push(articoloCasuale);
-            aggiornaLista();
+        // Funzione per aggiungere un articolo alla lista
+        function aggiungiArticolo() {
+            // Chiediamo all'utente di inserire un articolo
+            let articolo = prompt("Inserisci un articolo per la lista della spesa:");
+           
+            if (articolo) {
+                // Aggiungiamo l'articolo all'array con push()
+                listaDellaSpesa.push(articolo);
+                aggiornaLista();
+            } else {
+                alert("Non hai inserito nulla.");
+            }
         }
 
         // Funzione per rimuovere l'ultimo articolo dalla lista
@@ -83,6 +87,18 @@
             }
         }
 
+        // Funzione per selezionare un articolo casuale dalla lista
+        function selezionaArticoloCasuale() {
+            if (listaDellaSpesa.length > 0) {
+                // Selezioniamo un indice casuale con Math.random()
+                let indiceCasuale = Math.floor(Math.random() * listaDellaSpesa.length);
+                let articoloCasuale = listaDellaSpesa[indiceCasuale];
+                alert("Articolo Casuale Selezionato: " + articoloCasuale);
+            } else {
+                alert("La lista è vuota! Aggiungi prima un articolo.");
+            }
+        }
+
         // Funzione per aggiornare la lista visualizzata nell'interfaccia
         function aggiornaLista() {
             // Selezioniamo la lista nel DOM
@@ -90,18 +106,11 @@
             listaUl.innerHTML = ""; // Svuotiamo la lista prima di aggiornarla
 
             // Aggiungiamo ogni articolo dell'array come un elemento <li>
-            listaDellaSpesa.forEach(function(articolo) {
+            listaDellaSpesa.forEach(function(articolo, index) {
                 let li = document.createElement("li");
                 li.textContent = articolo;
                 listaUl.appendChild(li);
             });
-
-            // Aggiungi un messaggio nel caso la lista sia vuota
-            if (listaDellaSpesa.length === 0) {
-                let li = document.createElement("li");
-                li.textContent = "La lista è vuota";
-                listaUl.appendChild(li);
-            }
         }
     </script>
 

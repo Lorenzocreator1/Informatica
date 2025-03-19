@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gioco del Numero Magico nella Lista della Spesa</title>
+    <title>Gestione Lista della Spesa Casuale</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,34 +42,60 @@
 </head>
 <body>
 
-    <h1>Gioco del Numero Magico - Lista della Spesa</h1>
+    <h1>Lista della Spesa Casuale</h1>
     <ul id="listaSpesa"></ul>
 
     <div>
-        <button onclick="aggiungiArticolo()">Aggiungi Articolo</button>
+        <button onclick="aggiungiArticoloCasuale()">Aggiungi Articolo Casuale</button>
         <button onclick="rimuoviArticolo()">Rimuovi Ultimo Articolo</button>
-        <button onclick="rimuoviArticoloCasuale()">Rimuovi Articolo Casuale</button>
     </div>
 
     <script>
-        // Creazione di un array vuoto per la lista della spesa
+        // Array di articoli possibili
+        const articoliDisponibili = [
+            "Pane", "Latte", "Uova", "Mele", "Banane", "Carote", "Pasta", "Riso", "Pomodori", "Formaggio"
+        ];
+
+        // Array della lista della spesa
         let listaDellaSpesa = [];
 
-        // Funzione per aggiungere un articolo alla lista
-        function aggiungiArticolo() {
-            // Chiediamo all'utente di inserire un articolo
-            let articolo = prompt("Inserisci un articolo per la lista della spesa:");
-           
-            if (articolo) {
-                // Aggiungiamo l'articolo all'array con push()
-                listaDellaSpesa.push(articolo);
-                aggiornaLista();
-            } else {
-                alert("Non hai inserito nulla.");
-            }
+        // Funzione per aggiungere un articolo casuale alla lista
+        function aggiungiArticoloCasuale() {
+            // Selezioniamo un indice casuale dall'array articoliDisponibili
+            const indiceCasuale = Math.floor(Math.random() * articoliDisponibili.length);
+            const articoloCasuale = articoliDisponibili[indiceCasuale];
+
+            // Aggiungiamo l'articolo alla lista con push()
+            listaDellaSpesa.push(articoloCasuale);
+            aggiornaLista();
         }
 
         // Funzione per rimuovere l'ultimo articolo dalla lista
         function rimuoviArticolo() {
             if (listaDellaSpesa.length > 0) {
-                // Rimuoviamo l'ultim
+                // Rimuoviamo l'ultimo articolo con pop()
+                let articoloRimosso = listaDellaSpesa.pop();
+                alert("Hai rimosso: " + articoloRimosso);
+                aggiornaLista();
+            } else {
+                alert("La lista è già vuota!");
+            }
+        }
+
+        // Funzione per aggiornare la lista visualizzata nell'interfaccia
+        function aggiornaLista() {
+            // Selezioniamo la lista nel DOM
+            let listaUl = document.getElementById("listaSpesa");
+            listaUl.innerHTML = ""; // Svuotiamo la lista prima di aggiornarla
+
+            // Aggiungiamo ogni articolo dell'array come un elemento <li>
+            listaDellaSpesa.forEach(function(articolo) {
+                let li = document.createElement("li");
+                li.textContent = articolo;
+                listaUl.appendChild(li);
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,61 +1,78 @@
-Stampa i numeri primi da 0 a 1000
-
-e stampa i numeri non primi con accanto i suoi fattori
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisi Numerica con Array</title>
+    <title>Numeri Primi e Non Primi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .primi, .non-primi {
+            margin-top: 20px;
+        }
+        .numeri {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
+    <h1>Numeri Primi e Non Primi da 0 a 1000</h1>
 
-    <h1>Analisi Numerica con Array</h1>
-    <p>Lista generata:</p>
-    <p id="out1"></p>
+    <div class="primi">
+        <h2>Numeri Primi:</h2>
+        <div id="numeri-primi"></div>
+    </div>
+
+    <div class="non-primi">
+        <h2>Numeri Non Primi e i loro Fattori:</h2>
+        <div id="numeri-non-primi"></div>
+    </div>
+
     <script>
-           // array visibile a tutto lo script
-          let numeri=[];
-        // il numero casuale viene inserito nell'array in posizione i;
-          function InserisceNumeroCasuale(i)
-          {    
-            let NumeroCausale=Math.floor(Math.random()*100);
-            numeri[i]=NumeroCausale;    
-          }
-          InserisceNumeroCasuale(0);
-          InserisceNumeroCasuale(1);
-          InserisceNumeroCasuale(2);
-          InserisceNumeroCasuale(3);
-          InserisceNumeroCasuale(4);
-          document.getElementById("out1").innerHTML=numeri;
-
-
-          function isPrime(n)
-          {  
-            let prime=true;
-
-            for(let i=2;i<=(n/2); i++)
-                {
-                if ((n%i)==0)
-                    {prime=false;}
+        // Funzione per determinare se un numero è primo
+        function isPrime(num) {
+            if (num <= 1) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) {
+                    return false;
                 }
-           return prime;
+            }
+            return true;
+        }
 
+        // Funzione per ottenere i fattori di un numero
+        function getFactors(num) {
+            let factors = [];
+            for (let i = 1; i <= num; i++) {
+                if (num % i === 0) {
+                    factors.push(i);
+                }
+            }
+            return factors.join(", ");
+        }
 
-          }
+        // Stampiamo i numeri primi
+        let primeNumbers = [];
+        let nonPrimeNumbers = [];
+        for (let i = 0; i <= 1000; i++) {
+            if (isPrime(i)) {
+                primeNumbers.push(i);
+            } else {
+                nonPrimeNumbers.push({ number: i, factors: getFactors(i) });
+            }
+        }
 
-          console.log(isPrime(11));
+        // Visualizza i numeri primi
+        document.getElementById("numeri-primi").innerHTML = primeNumbers.join(", ");
 
-
-
-
-
-       
+        // Visualizza i numeri non primi con i loro fattori
+        let nonPrimeHtml = nonPrimeNumbers.map(item => {
+            return `<p>${item.number}: Fattori - ${item.factors}</p>`;
+        }).join("");
+        document.getElementById("numeri-non-primi").innerHTML = nonPrimeHtml;
     </script>
-
-
-   
 </body>
 </html>

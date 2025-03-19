@@ -1,142 +1,47 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestione Elementi Array</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            box-sizing: border-box;
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            font-size: 1.2rem;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            min-height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #333;
-            font-weight: bold;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .error {
-            color: #ff4d4d;
-            background-color: #ffe6e6;
-            border-color: #ff4d4d;
-        }
-
-        button {
-            padding: 12px 20px;
-            margin: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        button:focus {
-            outline: none;
-        }
-
-        button:active {
-            background-color: #388e3c;
-        }
-
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .btn-container button {
-            width: 100%;
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Element Finder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #result {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Gestione Elementi Array</h1>
-        
-        <div class="btn-container">
-            <button onclick="mostraElemento(0)">Primo Elemento</button>
-            <button onclick="mostraElemento(morra.length - 1)">Ultimo Elemento</button>
-            <button onclick="mostraElemento(10)">Elemento Fuori Limite</button>
-        </div>
+  <h1>Trova un elemento nell'array</h1>
 
-        <div id="result" class="result">Seleziona un'azione</div>
-    </div>
+  <label for="indexInput">Inserisci un indice: </label>
+  <input type="number" id="indexInput" min="0">
+  <button onclick="findElement()">Trova Elemento</button>
 
-    <script>
-        // Vettore "morra" con alcuni elementi
-        let morra = ["Roccia", "Carta", "Forbici"];
+  <div id="result"></div>
 
-        // Funzione che restituisce un elemento in base all'indice
-        function getElement(index) {
-            // Controlliamo se l'indice è valido
-            if (index < 0 || index >= morra.length) {
-                return "Errore: Indice non valido";
-            } else {
-                return morra[index];
-            }
-        }
+  <script>
+    const morra = ["Carta", "Forbice", "Sasso"]; // Array di esempio
 
-        // Funzione per mostrare il risultato
-        function mostraElemento(indice) {
-            // Otteniamo l'elemento o il messaggio di errore
-            let risultato = getElement(indice);
+    function getElement(index) {
+      // Verifica se l'indice è valido
+      if (index < 0 || index >= morra.length) {
+        return "Indice non valido";
+      }
+      return morra[index];
+    }
 
-            // Visualizziamo il risultato
-            let resultDiv = document.getElementById("result");
-            resultDiv.textContent = risultato;
-
-            // Se l'elemento non è valido, aggiungiamo la classe "error" per evidenziare l'errore
-            if (risultato === "Errore: Indice non valido") {
-                resultDiv.classList.add("error");
-            } else {
-                resultDiv.classList.remove("error");
-            }
-        }
-    </script>
+    function findElement() {
+      const index = parseInt(document.getElementById("indexInput").value);
+      const result = getElement(index);
+      document.getElementById("result").textContent = result;
+    }
+  </script>
 
 </body>
 </html>

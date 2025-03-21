@@ -1,0 +1,17 @@
+function calcola(a, b, c, d) {
+  // Prima operazione: somma pesata dei numeri
+  let primoRisultato = (a * 2) + (b * 3) + (c * 4) + (d * 5);
+  
+  // Seconda operazione: applicare una radice quadrata al primo risultato
+  let secondoRisultato = Math.sqrt(primoRisultato);
+  
+  // Restituisce entrambi i risultati come un oggetto
+  return {
+    primoRisultato: primoRisultato,
+    secondoRisultato: secondoRisultato
+  };
+}
+
+// Esempio di utilizzo
+let risultati = calcola(1, 2, 3, 4);
+console.log(risultati);

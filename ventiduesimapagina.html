@@ -1,17 +1,90 @@
-function calcola(a, b, c, d) {
-  // Prima operazione: somma pesata dei numeri
-  let primoRisultato = (a * 2) + (b * 3) + (c * 4) + (d * 5);
-  
-  // Seconda operazione: applicare una radice quadrata al primo risultato
-  let secondoRisultato = Math.sqrt(primoRisultato);
-  
-  // Restituisce entrambi i risultati come un oggetto
-  return {
-    primoRisultato: primoRisultato,
-    secondoRisultato: secondoRisultato
-  };
-}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcolo Funzione Matematica</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f4f8;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #4CAF50;
+    }
+    input {
+      margin: 10px 0;
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      width: 60%;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .output {
+      background-color: #f7f7f7;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calcola il risultato!</h1>
+    <form id="calculationForm">
+      <input type="number" id="a" placeholder="Inserisci il primo numero (a)" required><br>
+      <input type="number" id="b" placeholder="Inserisci il secondo numero (b)" required><br>
+      <input type="number" id="c" placeholder="Inserisci il terzo numero (c)" required><br>
+      <input type="number" id="d" placeholder="Inserisci il quarto numero (d)" required><br>
+      <button type="button" onclick="calcola()">Calcola!</button>
+    </form>
 
-// Esempio di utilizzo
-let risultati = calcola(1, 2, 3, 4);
-console.log(risultati);
+    <div class="output" id="output">
+      <h2>Risultato:</h2>
+      <p id="primoRisultato"></p>
+      <p id="secondoRisultato"></p>
+    </div>
+  </div>
+
+  <script>
+    // Funzione che calcola i risultati
+    function calcola() {
+      // Prendiamo i valori dagli input
+      let a = parseFloat(document.getElementById('a').value);
+      let b = parseFloat(document.getElementById('b').value);
+      let c = parseFloat(document.getElementById('c').value);
+      let d = parseFloat(document.getElementById('d').value);
+
+      // Prima operazione: somma pesata
+      let primoRisultato = (a * 2) + (b * 3) + (c * 4) + (d * 5);
+
+      // Seconda operazione: eleviamo al quadrato
+      let secondoRisultato = Math.pow(primoRisultato, 2);
+
+      // Mostriamo i risultati nel DOM
+      document.getElementById('primoRisultato').textContent = `Primo risultato (somma pesata): ${primoRisultato}`;
+      document.getElementById('secondoRisultato').textContent = `Secondo risultato (quadrato): ${secondoRisultato}`;
+    }
+  </script>
+</body>
+</html>

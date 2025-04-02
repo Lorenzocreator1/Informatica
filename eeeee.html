@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form con metodo POST e GET</title>
+  <!-- Aggiunta Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h1 class="mb-4">Modulo di Invio Messaggio</h1>
+
+  <!-- Form con Metodo POST -->
+  <form id="form-post" action="action_post.html" method="POST" class="mb-4">
+    <div class="mb-3">
+      <label for="nickname-post" class="form-label">Nickname</label>
+      <input type="text" class="form-control" id="nickname-post" name="nickname" required>
+    </div>
+    <div class="mb-3">
+      <label for="message-post" class="form-label">Messaggio</label>
+      <textarea class="form-control" id="message-post" name="message" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="privacy-post" class="form-label">Privacy</label>
+      <select class="form-select" id="privacy-post" name="privacy">
+        <option value="pubblico">Pubblico</option>
+        <option value="privato">Privato</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Invia (POST)</button>
+  </form>
+
+  <!-- Form con Metodo GET -->
+  <form id="form-get" action="action_get.html" method="GET">
+    <div class="mb-3">
+      <label for="nickname-get" class="form-label">Nickname</label>
+      <input type="text" class="form-control" id="nickname-get" name="nickname" required>
+    </div>
+    <div class="mb-3">
+      <label for="message-get" class="form-label">Messaggio</label>
+      <textarea class="form-control" id="message-get" name="message" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="privacy-get" class="form-label">Privacy</label>
+      <select class="form-select" id="privacy-get" name="privacy">
+        <option value="pubblico">Pubblico</option>
+        <option value="privato">Privato</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Invia (GET)</button>
+  </form>
+
+  <h2 class="mt-5">Dati Inviati (Usando JavaScript)</h2>
+  <div id="data-output"></div>
+
+</div>
+
+<!-- Script JS -->
+<script>
+  // Funzione per stampare i dati nella pagina dopo il submit
+  document.getElementById('form-post').addEventListener('submit', function (e) {
+    e.preventDefault();  // Evita il submit tradizionale
+    let nickname = document.getElementById('nickname-post').value;
+    let message = document.getElementById('message-post').value;
+    let privacy = document.getElementById('privacy-post').value;
+    
+    let output = `<p><strong>Nickname:</strong> ${nickname}</p>
+                  <p><strong>Messaggio:</strong> ${message}</p>
+                  <p><strong>Privacy:</strong> ${privacy}</p>`;
+    
+    document.getElementById('data-output').innerHTML = output;
+  });
+
+  // Funzione per stampare i dati nella pagina dopo il submit per GET
+  document.getElementById('form-get').addEventListener('submit', function (e) {
+    e.preventDefault();  // Evita il submit tradizionale
+    let nickname = document.getElementById('nickname-get').value;
+    let message = document.getElementById('message-get').value;
+    let privacy = document.getElementById('privacy-get').value;
+
+    let output = `<p><strong>Nickname:</strong> ${nickname}</p>
+                  <p><strong>Messaggio:</strong> ${message}</p>
+                  <p><strong>Privacy:</strong> ${privacy}</p>`;
+
+    document.getElementById('data-output').innerHTML = output;
+  });
+</script>
+
+<!-- Aggiunta Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

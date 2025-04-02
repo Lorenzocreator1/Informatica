@@ -6,56 +6,94 @@
     <title>Generatore di Numeri Casuali</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f4f8;
+            background-color: #e0f7fa; /* Nuovo colore di sfondo */
         }
 
         .container {
             text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+        }
+
+        h1 {
+            color: #00695c; /* Colore verde scuro */
         }
 
         .number {
-            font-size: 2em;
+            font-size: 1.5em;
             margin: 20px 0;
-            color: #4CAF50;
+            color: #ff5722; /* Nuovo colore per i numeri */
+            word-wrap: break-word;
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 1em;
-            background-color: #4CAF50;
+            padding: 12px 30px;
+            font-size: 1.2em;
+            background-color: #00796b; /* Nuovo colore per il pulsante */
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #004d40; /* Colore più scuro al passaggio del mouse */
+        }
+
+        #numberList {
+            margin-top: 20px;
+            text-align: left;
+            padding-left: 20px;
+            font-size: 1.1em;
+            color: #004d40;
+            height: 200px;
+            overflow-y: scroll;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Generatore di Numeri Casuali</h1>
-        <p>Clicca il pulsante per generare un numero tra 1 e 100</p>
-        <div class="number" id="randomNumber">-</div>
-        <button onclick="generateRandomNumber()">Genera Numero</button>
+        <p>Clicca il pulsante per generare 7000 numeri casuali tra 1 e 100</p>
+        <div class="number" id="randomNumber">Generazione in corso...</div>
+        <button onclick="generateRandomNumbers()">Genera Numeri</button>
+        <div id="numberList"></div>
     </div>
 
     <script>
-        function generateRandomNumber() {
-            const randomNumber = Math.floor(Math.random() * 100) + 1; // Genera numero da 1 a 100
-            document.getElementById('randomNumber').textContent = randomNumber;
+        function generateRandomNumbers() {
+            const numberListDiv = document.getElementById('numberList');
+            numberListDiv.innerHTML = '';  // Pulisce la lista precedente
+            const numbers = [];
+            
+            // Genera 7000 numeri casuali
+            for (let i = 0; i < 7000; i++) {
+                const randomNumber = Math.floor(Math.random() * 100) + 1;
+                numbers.push(randomNumber);
+                if (numbers.length > 50) {
+                    // Se ci sono più di 50 numeri, visualizza solo i più recenti
+                    numbers.shift();
+                }
+            }
+
+            // Mostra i numeri generati nella pagina
+            numbers.forEach(num => {
+                const numberItem = document.createElement('div');
+                numberItem.textContent = num;
+                numberListDiv.appendChild(numberItem);
+            });
+
+            document.getElementById('randomNumber').textContent = '7000 numeri generati!';
         }
     </script>
 </body>

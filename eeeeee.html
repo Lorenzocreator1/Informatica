@@ -73,16 +73,24 @@
         <h1>Generatore di Numeri Casuali</h1>
         <div>
             <label for="min">Min:</label>
-            <input type="number" id="min" value="1" step="any">
+            <input type="number" id="min" value="0" step="any">
             <label for="max">Max:</label>
-            <input type="number" id="max" value="100" step="any">
-            <button onclick="generaNumeri()">Genera</button>
+            <input type="number" id="max" value="1" step="any">
+            <button onclick="iniziaGenerazione()">Inizia Generazione</button>
         </div>
         <div id="output"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
     <script>
-        function generaNumeri() {
+        let ArrayNumeriCasuali = [];
+        let ArrayN = [];
+        let numeriGenerati = [];
+        let mediaRange = 0;
+        let intervalloGenerazione;
+        let count = 0;
+
+        function iniziaGenerazione() {
             const min = parseFloat(document.getElementById('min').value);
             const max = parseFloat(document.getElementById('max').value);
 
@@ -91,34 +99,77 @@
                 return;
             }
 
-            let numeri = [];
-            let numeriConMedia = [];
+            mediaRange = (max + min) / 2;  // La media del range
 
-            // Generazione di numeri casuali reali
-            for (let i = 0; i < 500; i++) {
-                let numeroCasuale = Math.random() * (max - min) + min;
-                numeri.push(numeroCasuale.toFixed(2));  // Aggiunge il numero con due decimali
+            // Inizia la generazione ogni 500ms
+            intervalloGenerazione = setInterval(() => {
+                generaNumero(min, max);
+            }, 500);
+        }
 
-                // Aggiungi la media dei primi 50 numeri
-                if (i === 49) {
-                    let media = calcolaMedia(numeri.slice(0, 50)); // Media dei primi 50 numeri
-                    numeriConMedia.push(...numeri.slice(0, 50), `Media: ${media.toFixed(2)}`);
-                }
+        function generaNumero(min, max) {
+            let numeroCasuale = Math.random() * (max - min) + min;
+            ArrayNumeriCasuali.push(numeroCasuale.toFixed(2));
 
-                // Aggiungi una nuova riga ogni 50 numeri
-                if (i % 50 === 49) {
-                    numeriConMedia.push("\n");
-                }
+            // Calcolo di n = Casuale(i) / Casuale(i-1) se i>0
+            if (ArrayNumeriCasuali.length > 1) {
+                let n = ArrayNumeriCasuali[ArrayNumeriCasuali.length - 1] / ArrayNumeriCasuali[ArrayNumeriCasuali.length - 2];
+                ArrayN.push(n.toFixed(2));
             }
 
-            // Mostra i numeri e la media nel div di output
-            document.getElementById('output').textContent = numeriConMedia.join(' ');
+            // Calcolare la distanza dal centro del range
+            let distanzaDallaMeta = Math.abs(numeroCasuale - mediaRange).toFixed(2);
+            numeriGenerati.push({numero: numeroCasuale.toFixed(2), distanza: distanzaDallaMeta});
+
+            count++;
+
+            // Calcolare la media ogni 50 numeri
+            if (count % 50 === 0) {
+                let media = calcolaMedia(ArrayNumeriCasuali.slice(count - 50, count));
+                document.getElementById('output').textContent = `Media degli ultimi 50 numeri: ${media.toFixed(2)}`;
+            }
+
+            // Stop se abbiamo generato 500 numeri
+            if (ArrayNumeriCasuali.length >= 500) {
+                clearInterval(intervalloGenerazione);
+                mostraGrafico();
+            }
         }
 
         function calcolaMedia(arr) {
             let somma = arr.reduce((acc, val) => acc + parseFloat(val), 0);
             return somma / arr.length;
         }
+
+        function mostraGrafico() {
+            const ctx = document.getElementById('grafico').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: numeriGenerati.length }, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Numeri Casuali',
+                        data: numeriGenerati.map(item => item.numero),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                    },
+                }
+            });
+        }
     </script>
+
+    <!-- Aggiungiamo un canvas per il grafico -->
+    <div>
+        <canvas id="grafico" width="400" height="200"></canvas>
+    </div>
 </body>
 </html>

@@ -36,6 +36,17 @@
       font-size: 1.2rem;
       margin-top: 10px;
     }
+    #game-over {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: red;
+      margin-top: 30px;
+    }
+    #timer {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -43,43 +54,81 @@
   <div id="grid"></div>
   <p>Tempo di reazione: <span id="reaction-time">0</span> ms</p>
   <p>Tempi registrati: <span id="reaction-times"></span></p>
+  <p id="game-over" style="display: none;">Gioco finito! Hai cliccato un quadrato sbagliato.</p>
+  <p id="timer">Tempo trascorso: <span id="time-left">0</span> secondi</p>
 
   <script>
     const grid = document.getElementById('grid');
     const reactionTimeDisplay = document.getElementById('reaction-time');
     const reactionTimesDisplay = document.getElementById('reaction-times');
+    const gameOverDisplay = document.getElementById('game-over');
+    const timerDisplay = document.getElementById('time-left');
     let reactionTimes = [];
+    let gameRunning = true;
+    let intervalTime = 3000;  // Tempo iniziale per generare la griglia (in ms)
+    let totalTime = 0;        // Tempo trascorso in secondi
 
+    // Funzione per generare la griglia
     function generateGrid() {
+      if (!gameRunning) return;
+
       grid.innerHTML = ''; // Pulisce la griglia
+
+      // Colori disponibili per i quadrati
       const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'grey'];
-      const targetColor = colors[Math.floor(Math.random() * colors.length)];
-      const targetIndex = Math.floor(Math.random() * 9);
       
+      // Seleziona il colore giusto
+      const targetColor = 'red';  // Il quadrato giusto sarà sempre rosso
+      const targetIndex = Math.floor(Math.random() * 9);  // Seleziona una posizione casuale nella griglia
+
+      // Crea 9 quadrati
       for (let i = 0; i < 9; i++) {
         const square = document.createElement('div');
         square.classList.add('square');
-        square.style.backgroundColor = i === targetIndex ? targetColor : colors[Math.floor(Math.random() * colors.length)];
+        square.style.backgroundColor = (i === targetIndex) ? targetColor : colors[Math.floor(Math.random() * colors.length)];
         square.addEventListener('click', () => handleClick(i === targetIndex));
         grid.appendChild(square);
       }
-      
+
       const startTime = Date.now();
-      
+
       function handleClick(isCorrect) {
         const reactionTime = Date.now() - startTime;
-        reactionTimeDisplay.textContent = `${reactionTime} ms`;
-        if (isCorrect) {
+        if (!isCorrect) {
+          // Se il quadrato è sbagliato, fermiamo il gioco
+          gameRunning = false;
+          gameOverDisplay.style.display = 'block'; // Mostra il messaggio di game over
+          reactionTimesDisplay.textContent = 'Gioco finito, nessun altro tempo registrato.';
+        } else {
+          // Se è corretto, registra il tempo di reazione
           reactionTimes.push(reactionTime);
+          reactionTimeDisplay.textContent = `${reactionTime} ms`;
           reactionTimesDisplay.textContent = reactionTimes.join(', ');
         }
-        setTimeout(generateGrid, 1000); // Nuova griglia dopo 1 secondo
       }
     }
 
-    setInterval(generateGrid, 3000); // Nuova griglia ogni 3 secondi
+    // Funzione per aggiornare la velocità ogni 30 secondi
+    function updateSpeed() {
+      totalTime += 1; // Incrementa il tempo trascorso di 1 secondo
+      timerDisplay.textContent = `Tempo trascorso: ${totalTime} secondi`;
+
+      if (totalTime % 30 === 0) {
+        intervalTime = Math.max(1000, intervalTime - 500); // Riduce il tempo dell'intervallo ogni 30 secondi (minimo 1 secondo)
+      }
+    }
+
+    // Funzione per iniziare a generare griglie ogni `intervalTime`
+    setInterval(() => {
+      if (gameRunning) {
+        generateGrid(); // Genera una nuova griglia
+      }
+    }, intervalTime); // Intervallo che diventa più veloce nel tempo
+
+    // Funzione per aggiornare la velocità ogni 1 secondo
+    setInterval(updateSpeed, 1000); // Ogni secondo aumenta la velocità del gioco
+
     generateGrid(); // Avvia il gioco subito
   </script>
 </body>
 </html>
-

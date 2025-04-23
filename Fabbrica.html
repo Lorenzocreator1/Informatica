@@ -1,0 +1,122 @@
+class ClipProducer {
+  constructor(name, productionRatePerSecond) {
+    this.name = name;
+    this.productionRate = productionRatePerSecond;
+    this.totalClips = 0;
+    this.running = false;
+    this._intervalId = null;
+    this._originalRate = productionRatePerSecond;
+  }
+
+  startProduction() {
+    if (this.running) return;
+    this.running = true;
+    this._intervalId = setInterval(() => {
+      this.totalClips += this.productionRate;
+      console.log(`[${this.name}] Graffette totali: ${this.totalClips}`);
+    }, 1000);
+  }
+
+  stopProduction() {
+    if (!this.running) return;
+    clearInterval(this._intervalId);
+    this._intervalId = null;
+    this.running = false;
+    console.log(`[${this.name}] Produzione fermata.`);
+  }
+
+  resetProduction() {
+    this.totalClips = 0;
+    console.log(`[${this.name}] Conteggio graffette azzerato.`);
+  }
+
+  status() {
+    return {
+      name: this.name,
+      running: this.running,
+      productionRate: this.productionRate,
+      totalClips: this.totalClips
+    };
+  }
+
+  // BOOST TEMPORANEO
+  boostProduction(durationInSeconds, boostMultiplier) {
+    if (!this.running) {
+      console.log(`[${this.name}] Impossibile attivare il boost: la produzione è ferma.`);
+      return;
+    }
+
+    this.productionRate *= boostMultiplier;
+    console.log(`[${this.name}] Boost attivato! Velocità x${boostMultiplier} per ${durationInSeconds} secondi.`);
+
+    setTimeout(() => {
+      this.productionRate = this._originalRate;
+      console.log(`[${this.name}] Boost terminato. Velocità normale ripristinata.`);
+    }, durationInSeconds * 1000);
+  }
+
+  // PAUSA TEMPORANEA
+  pauseProduction(durationInSeconds) {
+    if (!this.running) {
+      console.log(`[${this.name}] La produzione è già ferma.`);
+      return;
+    }
+
+    this.stopProduction();
+    console.log(`[${this.name}] Produzione in pausa per ${durationInSeconds} secondi...`);
+
+    setTimeout(() => {
+      this.startProduction();
+      console.log(`[${this.name}] Produzione ripresa dopo la pausa.`);
+    }, durationInSeconds * 1000);
+  }
+
+  // PRODUZIONE CICLICA CON LIMITE
+  startCyclicProduction(workSeconds, pauseSeconds, maxCycles = Infinity) {
+    if (this.running) {
+      console.log(`[${this.name}] Produzione già attiva.`);
+      return;
+    }
+
+    let cyclesDone = 0;
+
+    const cycle = () => {
+      if (cyclesDone >= maxCycles) {
+        console.log(`[${this.name}] Cicli completati: ${maxCycles}. Produzione ciclica terminata.`);
+        return;
+      }
+
+      this.startProduction();
+      console.log(`[${this.name}] Ciclo ${cyclesDone + 1} iniziato. Lavoro per ${workSeconds} secondi.`);
+
+      setTimeout(() => {
+        this.stopProduction();
+        console.log(`[${this.name}] Pausa per ${pauseSeconds} secondi.`);
+
+        cyclesDone++;
+
+        setTimeout(() => {
+          cycle();
+        }, pauseSeconds * 1000);
+      }, workSeconds * 1000);
+    };
+
+    cycle();
+  }
+}
+
+// USO DELLA FABBRICA
+const fabbrica = new ClipProducer("Graffettificio Matto", 4);
+
+// Esempio: 3 cicli di 6s lavoro + 3s pausa
+fabbrica.startCyclicProduction(6, 3, 3);
+
+// Boost dopo 10 secondi
+setTimeout(() => {
+  fabbrica.boostProduction(5, 2);
+}, 10000);
+
+// Pausa manuale dopo 25 secondi
+setTimeout(() => {
+  fabbrica.pauseProduction(5);
+}, 25000);

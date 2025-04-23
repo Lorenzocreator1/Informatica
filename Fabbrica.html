@@ -1,122 +1,123 @@
-class ClipProducer {
-  constructor(name, productionRatePerSecond) {
-    this.name = name;
-    this.productionRate = productionRatePerSecond;
-    this.totalClips = 0;
-    this.running = false;
-    this._intervalId = null;
-    this._originalRate = productionRatePerSecond;
-  }
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Graffettificio Matto</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    button { margin: 5px; padding: 10px 15px; }
+    #log { white-space: pre-line; margin-top: 20px; border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: auto; background: #f9f9f9; }
+  </style>
+</head>
+<body>
+  <h1>Graffettificio Matto</h1>
+  <button onclick="fabbrica.startProduction()">Avvia Produzione</button>
+  <button onclick="fabbrica.stopProduction()">Ferma Produzione</button>
+  <button onclick="fabbrica.resetProduction()">Reset</button>
+  <button onclick="fabbrica.boostProduction(5, 2)">Boost (x2 per 5s)</button>
+  <button onclick="fabbrica.pauseProduction(5)">Pausa (5s)</button>
+  <button onclick="fabbrica.startCyclicProduction(6, 3, 3)">Produzione Ciclica (3 cicli)</button>
+  <div id="log"></div>
 
-  startProduction() {
-    if (this.running) return;
-    this.running = true;
-    this._intervalId = setInterval(() => {
-      this.totalClips += this.productionRate;
-      console.log(`[${this.name}] Graffette totali: ${this.totalClips}`);
-    }, 1000);
-  }
-
-  stopProduction() {
-    if (!this.running) return;
-    clearInterval(this._intervalId);
-    this._intervalId = null;
-    this.running = false;
-    console.log(`[${this.name}] Produzione fermata.`);
-  }
-
-  resetProduction() {
-    this.totalClips = 0;
-    console.log(`[${this.name}] Conteggio graffette azzerato.`);
-  }
-
-  status() {
-    return {
-      name: this.name,
-      running: this.running,
-      productionRate: this.productionRate,
-      totalClips: this.totalClips
-    };
-  }
-
-  // BOOST TEMPORANEO
-  boostProduction(durationInSeconds, boostMultiplier) {
-    if (!this.running) {
-      console.log(`[${this.name}] Impossibile attivare il boost: la produzione è ferma.`);
-      return;
-    }
-
-    this.productionRate *= boostMultiplier;
-    console.log(`[${this.name}] Boost attivato! Velocità x${boostMultiplier} per ${durationInSeconds} secondi.`);
-
-    setTimeout(() => {
-      this.productionRate = this._originalRate;
-      console.log(`[${this.name}] Boost terminato. Velocità normale ripristinata.`);
-    }, durationInSeconds * 1000);
-  }
-
-  // PAUSA TEMPORANEA
-  pauseProduction(durationInSeconds) {
-    if (!this.running) {
-      console.log(`[${this.name}] La produzione è già ferma.`);
-      return;
-    }
-
-    this.stopProduction();
-    console.log(`[${this.name}] Produzione in pausa per ${durationInSeconds} secondi...`);
-
-    setTimeout(() => {
-      this.startProduction();
-      console.log(`[${this.name}] Produzione ripresa dopo la pausa.`);
-    }, durationInSeconds * 1000);
-  }
-
-  // PRODUZIONE CICLICA CON LIMITE
-  startCyclicProduction(workSeconds, pauseSeconds, maxCycles = Infinity) {
-    if (this.running) {
-      console.log(`[${this.name}] Produzione già attiva.`);
-      return;
-    }
-
-    let cyclesDone = 0;
-
-    const cycle = () => {
-      if (cyclesDone >= maxCycles) {
-        console.log(`[${this.name}] Cicli completati: ${maxCycles}. Produzione ciclica terminata.`);
-        return;
+  <script>
+    class ClipProducer {
+      constructor(name, productionRatePerSecond) {
+        this.name = name;
+        this.productionRate = productionRatePerSecond;
+        this.totalClips = 0;
+        this.running = false;
+        this._intervalId = null;
+        this._originalRate = productionRatePerSecond;
       }
 
-      this.startProduction();
-      console.log(`[${this.name}] Ciclo ${cyclesDone + 1} iniziato. Lavoro per ${workSeconds} secondi.`);
+      log(message) {
+        const logDiv = document.getElementById("log");
+        logDiv.textContent += message + '\n';
+        logDiv.scrollTop = logDiv.scrollHeight;
+      }
 
-      setTimeout(() => {
-        this.stopProduction();
-        console.log(`[${this.name}] Pausa per ${pauseSeconds} secondi.`);
+      startProduction() {
+        if (this.running) return;
+        this.running = true;
+        this._intervalId = setInterval(() => {
+          this.totalClips += this.productionRate;
+          this.log(`[${this.name}] Graffette totali: ${this.totalClips}`);
+        }, 1000);
+      }
 
-        cyclesDone++;
+      stopProduction() {
+        if (!this.running) return;
+        clearInterval(this._intervalId);
+        this._intervalId = null;
+        this.running = false;
+        this.log(`[${this.name}] Produzione fermata.`);
+      }
+
+      resetProduction() {
+        this.totalClips = 0;
+        this.log(`[${this.name}] Conteggio graffette azzerato.`);
+      }
+
+      boostProduction(durationInSeconds, boostMultiplier) {
+        if (!this.running) {
+          this.log(`[${this.name}] Impossibile attivare il boost: la produzione è ferma.`);
+          return;
+        }
+
+        this.productionRate *= boostMultiplier;
+        this.log(`[${this.name}] Boost attivato! Velocità x${boostMultiplier} per ${durationInSeconds} secondi.`);
 
         setTimeout(() => {
-          cycle();
-        }, pauseSeconds * 1000);
-      }, workSeconds * 1000);
-    };
+          this.productionRate = this._originalRate;
+          this.log(`[${this.name}] Boost terminato. Velocità normale ripristinata.`);
+        }, durationInSeconds * 1000);
+      }
 
-    cycle();
-  }
-}
+      pauseProduction(durationInSeconds) {
+        if (!this.running) {
+          this.log(`[${this.name}] La produzione è già ferma.`);
+          return;
+        }
 
-// USO DELLA FABBRICA
-const fabbrica = new ClipProducer("Graffettificio Matto", 4);
+        this.stopProduction();
+        this.log(`[${this.name}] Produzione in pausa per ${durationInSeconds} secondi...`);
 
-// Esempio: 3 cicli di 6s lavoro + 3s pausa
-fabbrica.startCyclicProduction(6, 3, 3);
+        setTimeout(() => {
+          this.startProduction();
+          this.log(`[${this.name}] Produzione ripresa dopo la pausa.`);
+        }, durationInSeconds * 1000);
+      }
 
-// Boost dopo 10 secondi
-setTimeout(() => {
-  fabbrica.boostProduction(5, 2);
-}, 10000);
+      startCyclicProduction(workSeconds, pauseSeconds, maxCycles = Infinity) {
+        if (this.running) {
+          this.log(`[${this.name}] Produzione già attiva.`);
+          return;
+        }
 
-// Pausa manuale dopo 25 secondi
-setTimeout(() => {
-  fabbrica.pauseProduction(5);
-}, 25000);
+        let cyclesDone = 0;
+        const cycle = () => {
+          if (cyclesDone >= maxCycles) {
+            this.log(`[${this.name}] Cicli completati: ${maxCycles}. Produzione ciclica terminata.`);
+            return;
+          }
+
+          this.startProduction();
+          this.log(`[${this.name}] Ciclo ${cyclesDone + 1} iniziato. Lavoro per ${workSeconds} secondi.`);
+
+          setTimeout(() => {
+            this.stopProduction();
+            this.log(`[${this.name}] Pausa per ${pauseSeconds} secondi.`);
+            cyclesDone++;
+
+            setTimeout(cycle, pauseSeconds * 1000);
+          }, workSeconds * 1000);
+        };
+
+        cycle();
+      }
+    }
+
+    const fabbrica = new ClipProducer("Graffettificio Matto", 4);
+  </script>
+</body>
+</html>

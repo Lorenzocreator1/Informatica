@@ -47,6 +47,20 @@
       font-weight: bold;
       margin-top: 20px;
     }
+    #restart-button {
+      display: none;
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #restart-button:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
@@ -56,6 +70,7 @@
   <p>Tempi registrati: <span id="reaction-times"></span></p>
   <p id="game-over" style="display: none;">Gioco finito! Hai cliccato un quadrato sbagliato.</p>
   <p id="timer">Tempo trascorso: <span id="time-left">0</span> secondi</p>
+  <button id="restart-button">Riparti</button>
 
   <script>
     const grid = document.getElementById('grid');
@@ -63,6 +78,7 @@
     const reactionTimesDisplay = document.getElementById('reaction-times');
     const gameOverDisplay = document.getElementById('game-over');
     const timerDisplay = document.getElementById('time-left');
+    const restartButton = document.getElementById('restart-button');
     let reactionTimes = [];
     let gameRunning = true;
     let intervalTime = 3000;  // Tempo iniziale per generare la griglia (in ms)
@@ -75,7 +91,7 @@
       grid.innerHTML = ''; // Pulisce la griglia
 
       // Colori disponibili per i quadrati
-      const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'grey'];
+      const colors = ['blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'grey'];
       
       // Seleziona il colore giusto
       const targetColor = 'red';  // Il quadrato giusto sarà sempre rosso
@@ -85,6 +101,7 @@
       for (let i = 0; i < 9; i++) {
         const square = document.createElement('div');
         square.classList.add('square');
+        // Aggiungi un quadrato rosso solo alla posizione target
         square.style.backgroundColor = (i === targetIndex) ? targetColor : colors[Math.floor(Math.random() * colors.length)];
         square.addEventListener('click', () => handleClick(i === targetIndex));
         grid.appendChild(square);
@@ -99,6 +116,7 @@
           gameRunning = false;
           gameOverDisplay.style.display = 'block'; // Mostra il messaggio di game over
           reactionTimesDisplay.textContent = 'Gioco finito, nessun altro tempo registrato.';
+          restartButton.style.display = 'block'; // Mostra il pulsante "Riparti"
         } else {
           // Se è corretto, registra il tempo di reazione
           reactionTimes.push(reactionTime);
@@ -127,6 +145,21 @@
 
     // Funzione per aggiornare la velocità ogni 1 secondo
     setInterval(updateSpeed, 1000); // Ogni secondo aumenta la velocità del gioco
+
+    // Funzione per ripartire il gioco
+    function restartGame() {
+      gameRunning = true;
+      totalTime = 0;
+      reactionTimes = [];
+      reactionTimeDisplay.textContent = '0';
+      reactionTimesDisplay.textContent = '';
+      gameOverDisplay.style.display = 'none';
+      restartButton.style.display = 'none';
+      generateGrid(); // Avvia una nuova partita
+    }
+
+    // Aggiungi evento al pulsante di restart
+    restartButton.addEventListener('click', restartGame);
 
     generateGrid(); // Avvia il gioco subito
   </script>

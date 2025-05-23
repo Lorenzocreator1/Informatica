@@ -65,7 +65,7 @@
     #form-container {
       margin-top: 40px;
     }
-    #salva-button {
+    #salva-button, #download-button {
       padding: 10px 15px;
       font-size: 1rem;
       cursor: pointer;
@@ -74,8 +74,12 @@
       border: none;
       border-radius: 5px;
     }
-    #salva-button:hover {
+    #salva-button:hover, #download-button:hover {
       background-color: #0056b3;
+    }
+    #download-button {
+      display: none;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -95,6 +99,7 @@
     <button id="salva-button">Salva</button>
     <p>Dati salvati: <span id="dati-salvati"></span></p>
   </div>
+  <button id="download-button">Scarica Dati</button>
 
   <script>
     const grid = document.getElementById('grid');
@@ -103,8 +108,12 @@
     const gameOverDisplay = document.getElementById('game-over');
     const timerDisplay = document.getElementById('time-left');
     const restartButton = document.getElementById('restart-button');
+    const downloadButton = document.getElementById('download-button');
+    const salvaButton = document.getElementById('salva-button');
+    const nomeInput = document.getElementById('nome');
+    const cognomeInput = document.getElementById('cognome');
     let reactionTimes = [];
-    let gameRunning = true;
+    let gameRunning = false;
     let intervalTime = 3000;
     let totalTime = 0;
     let datiArray = [];
@@ -152,23 +161,34 @@
       generateGrid();
     }
 
-    restartButton.addEventListener('click', restartGame);
-    generateGrid();
+    function downloadData() {
+      const dataBlob = new Blob([JSON.stringify(datiArray, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(dataBlob);
+      link.download = 'tempi_reazione.json';
+      link.click();
+    }
 
-    document.getElementById('salva-button').addEventListener('click', () => {
-      const nome = document.getElementById('nome').value.trim();
-      const cognome = document.getElementById('cognome').value.trim();
+    salvaButton.addEventListener('click', () => {
+      const nome = nomeInput.value.trim();
+      const cognome = cognomeInput.value.trim();
 
       if (nome && cognome) {
+        gameRunning = true; // Inizia il gioco quando i dati sono salvati
         const nuovoUtente = { nome, cognome, tempiReazione: [...reactionTimes] };
         datiArray.push(nuovoUtente);
         document.getElementById('dati-salvati').textContent = JSON.stringify(datiArray, null, 2);
-        document.getElementById('nome').value = '';
-        document.getElementById('cognome').value = '';
+        nomeInput.value = '';
+        cognomeInput.value = '';
+        downloadButton.style.display = 'block'; // Mostra il pulsante per il download
+        generateGrid();
       } else {
         alert('Inserisci entrambi i valori!');
       }
     });
+
+    restartButton.addEventListener('click', restartGame);
+    downloadButton.addEventListener('click', downloadData);
   </script>
 </body>
 </html>

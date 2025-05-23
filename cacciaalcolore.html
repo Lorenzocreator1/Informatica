@@ -78,18 +78,26 @@
 </head>
 <body>
   <h1>Clicca il quadrato rosso!</h1>
-  <div id="grid"></div>
-  <p id="game-over">Gioco finito! Hai cliccato un quadrato sbagliato.</p>
-  <button id="restart-button">Riparti</button>
-
+  
+  <!-- Sezione per i dati dell'utente -->
   <div id="form-container">
     <h2>Inserisci i tuoi dati</h2>
     <input type="text" id="nome" placeholder="Nome">
     <input type="text" id="cognome" placeholder="Cognome">
     <button id="salva-button">Salva</button>
   </div>
+  
+  <!-- Grid del gioco -->
+  <div id="grid"></div>
+
+  <!-- Game Over -->
+  <p id="game-over">Gioco finito! Hai cliccato un quadrato sbagliato.</p>
+  <button id="restart-button">Riparti</button>
+
+  <!-- Scarica i dati -->
   <button id="download-button">Scarica Dati</button>
 
+  <!-- Visualizzazione dei dati salvati -->
   <p id="dati-salvati"></p>
 
   <script>

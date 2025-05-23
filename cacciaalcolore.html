@@ -132,8 +132,12 @@
       } else {
         const reactionTime = (clickTime - startTime) / 1000;  // Tempo in secondi
         alert(`Tempo di reazione: ${reactionTime} secondi`);
+
         // Salva il tempo di reazione
-        datiArray[datiArray.length - 1].tempiReazione.push(reactionTime);
+        const currentUser = datiArray[datiArray.length - 1];
+        if (currentUser) {
+          currentUser.tempiReazione.push(reactionTime);
+        }
 
         // Regenera la griglia dopo 1 secondo
         setTimeout(generateGrid, 1000);

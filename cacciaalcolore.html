@@ -27,26 +27,12 @@
       cursor: pointer;
       border-radius: 10px;
     }
-    #reaction-time {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    #reaction-times {
-      font-size: 1.2rem;
-      margin-top: 10px;
-    }
     #game-over {
       font-size: 1.8rem;
       font-weight: bold;
       color: red;
       margin-top: 30px;
       display: none;
-    }
-    #timer {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-top: 20px;
     }
     #restart-button {
       display: none;
@@ -86,10 +72,7 @@
 <body>
   <h1>Clicca il quadrato rosso!</h1>
   <div id="grid"></div>
-  <p>Tempo di reazione: <span id="reaction-time">0</span> ms</p>
-  <p>Tempi registrati: <span id="reaction-times"></span></p>
   <p id="game-over">Gioco finito! Hai cliccato un quadrato sbagliato.</p>
-  <p id="timer">Tempo trascorso: <span id="time-left">0</span> secondi</p>
   <button id="restart-button">Riparti</button>
 
   <div id="form-container">
@@ -103,19 +86,13 @@
 
   <script>
     const grid = document.getElementById('grid');
-    const reactionTimeDisplay = document.getElementById('reaction-time');
-    const reactionTimesDisplay = document.getElementById('reaction-times');
     const gameOverDisplay = document.getElementById('game-over');
-    const timerDisplay = document.getElementById('time-left');
     const restartButton = document.getElementById('restart-button');
     const downloadButton = document.getElementById('download-button');
     const salvaButton = document.getElementById('salva-button');
     const nomeInput = document.getElementById('nome');
     const cognomeInput = document.getElementById('cognome');
-    let reactionTimes = [];
     let gameRunning = false;
-    let intervalTime = 3000;
-    let totalTime = 0;
     let datiArray = [];
 
     function generateGrid() {
@@ -125,7 +102,7 @@
       const colors = ['blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'grey'];
       const targetColor = 'red';
       const targetIndex = Math.floor(Math.random() * 9);
-      
+
       for (let i = 0; i < 9; i++) {
         const square = document.createElement('div');
         square.classList.add('square');
@@ -133,29 +110,21 @@
         square.addEventListener('click', () => handleClick(i === targetIndex));
         grid.appendChild(square);
       }
+    }
 
-      const startTime = Date.now();
-
-      function handleClick(isCorrect) {
-        const reactionTime = Date.now() - startTime;
-        if (!isCorrect) {
-          gameRunning = false;
-          gameOverDisplay.style.display = 'block';
-          restartButton.style.display = 'block';
-        } else {
-          reactionTimes.push(reactionTime);
-          reactionTimeDisplay.textContent = `${reactionTime} ms`;
-          reactionTimesDisplay.textContent = reactionTimes.join(', ');
-        }
+    function handleClick(isCorrect) {
+      if (!isCorrect) {
+        gameRunning = false;
+        gameOverDisplay.style.display = 'block';
+        restartButton.style.display = 'block';
+      } else {
+        // Se clicchi correttamente, puoi rigenerare la griglia dopo 1 secondo
+        setTimeout(generateGrid, 1000);  // Aggiungi un ritardo per la nuova generazione della griglia
       }
     }
 
     function restartGame() {
       gameRunning = true;
-      totalTime = 0;
-      reactionTimes = [];
-      reactionTimeDisplay.textContent = '0';
-      reactionTimesDisplay.textContent = '';
       gameOverDisplay.style.display = 'none';
       restartButton.style.display = 'none';
       generateGrid();
@@ -165,7 +134,7 @@
       const dataBlob = new Blob([JSON.stringify(datiArray, null, 2)], { type: 'application/json' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(dataBlob);
-      link.download = 'tempi_reazione.json';
+      link.download = 'dati_utente.json';
       link.click();
     }
 
@@ -175,7 +144,7 @@
 
       if (nome && cognome) {
         gameRunning = true; // Inizia il gioco quando i dati sono salvati
-        const nuovoUtente = { nome, cognome, tempiReazione: [...reactionTimes] };
+        const nuovoUtente = { nome, cognome };
         datiArray.push(nuovoUtente);
         document.getElementById('dati-salvati').textContent = JSON.stringify(datiArray, null, 2);
         nomeInput.value = '';

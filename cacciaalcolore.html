@@ -41,6 +41,7 @@
       font-weight: bold;
       color: red;
       margin-top: 30px;
+      display: none;
     }
     #timer {
       font-size: 1.2rem;
@@ -61,6 +62,21 @@
     #restart-button:hover {
       background-color: #45a049;
     }
+    #form-container {
+      margin-top: 40px;
+    }
+    #salva-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #salva-button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -68,9 +84,17 @@
   <div id="grid"></div>
   <p>Tempo di reazione: <span id="reaction-time">0</span> ms</p>
   <p>Tempi registrati: <span id="reaction-times"></span></p>
-  <p id="game-over" style="display: none;">Gioco finito! Hai cliccato un quadrato sbagliato.</p>
+  <p id="game-over">Gioco finito! Hai cliccato un quadrato sbagliato.</p>
   <p id="timer">Tempo trascorso: <span id="time-left">0</span> secondi</p>
   <button id="restart-button">Riparti</button>
+
+  <div id="form-container">
+    <h2>Inserisci i tuoi dati</h2>
+    <input type="text" id="nome" placeholder="Nome">
+    <input type="text" id="cognome" placeholder="Cognome">
+    <button id="salva-button">Salva</button>
+    <p>Dati salvati: <span id="dati-salvati"></span></p>
+  </div>
 
   <script>
     const grid = document.getElementById('grid');
@@ -81,27 +105,21 @@
     const restartButton = document.getElementById('restart-button');
     let reactionTimes = [];
     let gameRunning = true;
-    let intervalTime = 3000;  // Tempo iniziale per generare la griglia (in ms)
-    let totalTime = 0;        // Tempo trascorso in secondi
+    let intervalTime = 3000;
+    let totalTime = 0;
+    let datiArray = [];
 
-    // Funzione per generare la griglia
     function generateGrid() {
       if (!gameRunning) return;
+      grid.innerHTML = '';
 
-      grid.innerHTML = ''; // Pulisce la griglia
-
-      // Colori disponibili per i quadrati
       const colors = ['blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'grey'];
+      const targetColor = 'red';
+      const targetIndex = Math.floor(Math.random() * 9);
       
-      // Seleziona il colore giusto
-      const targetColor = 'red';  // Il quadrato giusto sarà sempre rosso
-      const targetIndex = Math.floor(Math.random() * 9);  // Seleziona una posizione casuale nella griglia
-
-      // Crea 9 quadrati
       for (let i = 0; i < 9; i++) {
         const square = document.createElement('div');
         square.classList.add('square');
-        // Aggiungi un quadrato rosso solo alla posizione target
         square.style.backgroundColor = (i === targetIndex) ? targetColor : colors[Math.floor(Math.random() * colors.length)];
         square.addEventListener('click', () => handleClick(i === targetIndex));
         grid.appendChild(square);
@@ -112,13 +130,10 @@
       function handleClick(isCorrect) {
         const reactionTime = Date.now() - startTime;
         if (!isCorrect) {
-          // Se il quadrato è sbagliato, fermiamo il gioco
           gameRunning = false;
-          gameOverDisplay.style.display = 'block'; // Mostra il messaggio di game over
-          reactionTimesDisplay.textContent = 'Gioco finito, nessun altro tempo registrato.';
-          restartButton.style.display = 'block'; // Mostra il pulsante "Riparti"
+          gameOverDisplay.style.display = 'block';
+          restartButton.style.display = 'block';
         } else {
-          // Se è corretto, registra il tempo di reazione
           reactionTimes.push(reactionTime);
           reactionTimeDisplay.textContent = `${reactionTime} ms`;
           reactionTimesDisplay.textContent = reactionTimes.join(', ');
@@ -126,27 +141,6 @@
       }
     }
 
-    // Funzione per aggiornare la velocità ogni 30 secondi
-    function updateSpeed() {
-      totalTime += 1; // Incrementa il tempo trascorso di 1 secondo
-      timerDisplay.textContent = `Tempo trascorso: ${totalTime} secondi`;
-
-      if (totalTime % 30 === 0) {
-        intervalTime = Math.max(1000, intervalTime - 500); // Riduce il tempo dell'intervallo ogni 30 secondi (minimo 1 secondo)
-      }
-    }
-
-    // Funzione per iniziare a generare griglie ogni `intervalTime`
-    setInterval(() => {
-      if (gameRunning) {
-        generateGrid(); // Genera una nuova griglia
-      }
-    }, intervalTime); // Intervallo che diventa più veloce nel tempo
-
-    // Funzione per aggiornare la velocità ogni 1 secondo
-    setInterval(updateSpeed, 1000); // Ogni secondo aumenta la velocità del gioco
-
-    // Funzione per ripartire il gioco
     function restartGame() {
       gameRunning = true;
       totalTime = 0;
@@ -155,13 +149,26 @@
       reactionTimesDisplay.textContent = '';
       gameOverDisplay.style.display = 'none';
       restartButton.style.display = 'none';
-      generateGrid(); // Avvia una nuova partita
+      generateGrid();
     }
 
-    // Aggiungi evento al pulsante di restart
     restartButton.addEventListener('click', restartGame);
+    generateGrid();
 
-    generateGrid(); // Avvia il gioco subito
+    document.getElementById('salva-button').addEventListener('click', () => {
+      const nome = document.getElementById('nome').value.trim();
+      const cognome = document.getElementById('cognome').value.trim();
+
+      if (nome && cognome) {
+        const nuovoUtente = { nome, cognome, tempiReazione: [...reactionTimes] };
+        datiArray.push(nuovoUtente);
+        document.getElementById('dati-salvati').textContent = JSON.stringify(datiArray, null, 2);
+        document.getElementById('nome').value = '';
+        document.getElementById('cognome').value = '';
+      } else {
+        alert('Inserisci entrambi i valori!');
+      }
+    });
   </script>
 </body>
 </html>

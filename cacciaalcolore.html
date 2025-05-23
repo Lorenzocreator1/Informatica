@@ -67,6 +67,13 @@
       display: none;
       margin-top: 20px;
     }
+    #dati-salvati {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -80,9 +87,10 @@
     <input type="text" id="nome" placeholder="Nome">
     <input type="text" id="cognome" placeholder="Cognome">
     <button id="salva-button">Salva</button>
-    <p>Dati salvati: <span id="dati-salvati"></span></p>
   </div>
   <button id="download-button">Scarica Dati</button>
+
+  <p id="dati-salvati"></p>
 
   <script>
     const grid = document.getElementById('grid');
@@ -92,8 +100,10 @@
     const salvaButton = document.getElementById('salva-button');
     const nomeInput = document.getElementById('nome');
     const cognomeInput = document.getElementById('cognome');
+    const datiSalvatiDisplay = document.getElementById('dati-salvati');
     let gameRunning = false;
     let datiArray = [];
+    let startTime = 0;  // Per registrare il tempo di reazione
 
     function generateGrid() {
       if (!gameRunning) return;
@@ -103,23 +113,30 @@
       const targetColor = 'red';
       const targetIndex = Math.floor(Math.random() * 9);
 
+      startTime = Date.now();  // Inizia il timer per calcolare il tempo di reazione
+
       for (let i = 0; i < 9; i++) {
         const square = document.createElement('div');
         square.classList.add('square');
         square.style.backgroundColor = (i === targetIndex) ? targetColor : colors[Math.floor(Math.random() * colors.length)];
-        square.addEventListener('click', () => handleClick(i === targetIndex));
+        square.addEventListener('click', () => handleClick(i === targetIndex, Date.now()));
         grid.appendChild(square);
       }
     }
 
-    function handleClick(isCorrect) {
+    function handleClick(isCorrect, clickTime) {
       if (!isCorrect) {
         gameRunning = false;
         gameOverDisplay.style.display = 'block';
         restartButton.style.display = 'block';
       } else {
-        // Se clicchi correttamente, puoi rigenerare la griglia dopo 1 secondo
-        setTimeout(generateGrid, 1000);  // Aggiungi un ritardo per la nuova generazione della griglia
+        const reactionTime = (clickTime - startTime) / 1000;  // Tempo in secondi
+        alert(`Tempo di reazione: ${reactionTime} secondi`);
+        // Salva il tempo di reazione
+        datiArray[datiArray.length - 1].tempiReazione.push(reactionTime);
+
+        // Regenera la griglia dopo 1 secondo
+        setTimeout(generateGrid, 1000);
       }
     }
 
@@ -144,9 +161,12 @@
 
       if (nome && cognome) {
         gameRunning = true; // Inizia il gioco quando i dati sono salvati
-        const nuovoUtente = { nome, cognome };
+        const nuovoUtente = { nome, cognome, tempiReazione: [] };
         datiArray.push(nuovoUtente);
-        document.getElementById('dati-salvati').textContent = JSON.stringify(datiArray, null, 2);
+        
+        // Mostra i dati salvati senza parentesi
+        datiSalvatiDisplay.textContent = `Nome: ${nome}, Cognome: ${cognome}`;
+        
         nomeInput.value = '';
         cognomeInput.value = '';
         downloadButton.style.display = 'block'; // Mostra il pulsante per il download

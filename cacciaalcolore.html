@@ -74,6 +74,11 @@
       font-size: 1.2rem;
       font-weight: bold;
     }
+    #tempi-reazione {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -100,6 +105,9 @@
   <!-- Visualizzazione dei dati salvati -->
   <p id="dati-salvati"></p>
 
+  <!-- Visualizzazione dei tempi di reazione -->
+  <p id="tempi-reazione">Tempi di reazione: </p>
+
   <script>
     const grid = document.getElementById('grid');
     const gameOverDisplay = document.getElementById('game-over');
@@ -109,9 +117,11 @@
     const nomeInput = document.getElementById('nome');
     const cognomeInput = document.getElementById('cognome');
     const datiSalvatiDisplay = document.getElementById('dati-salvati');
+    const tempiReazioneDisplay = document.getElementById('tempi-reazione');
     let gameRunning = false;
     let datiArray = [];
     let startTime = 0;  // Per registrare il tempo di reazione
+    let tempiReazione = [];  // Array per i tempi di reazione
 
     function generateGrid() {
       if (!gameRunning) return;
@@ -139,7 +149,10 @@
         restartButton.style.display = 'block';
       } else {
         const reactionTime = (clickTime - startTime) / 1000;  // Tempo in secondi
-        alert(`Tempo di reazione: ${reactionTime} secondi`);
+        tempiReazione.push(reactionTime);
+        
+        // Aggiorna la visualizzazione dei tempi di reazione in tempo reale
+        tempiReazioneDisplay.textContent = `Tempi di reazione: ${tempiReazione.join(', ')}`;
 
         // Salva il tempo di reazione
         const currentUser = datiArray[datiArray.length - 1];
@@ -156,6 +169,8 @@
       gameRunning = true;
       gameOverDisplay.style.display = 'none';
       restartButton.style.display = 'none';
+      tempiReazione = [];  // Resetta i tempi di reazione
+      tempiReazioneDisplay.textContent = 'Tempi di reazione: ';  // Reset visualizzazione
       generateGrid();
     }
 

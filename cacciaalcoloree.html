@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Caccia all’Immagine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      padding-top: 50px;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      grid-gap: 15px;
+      justify-content: center;
+      margin: 30px auto;
+      max-width: 800px;
+    }
+    .img-square {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .img-square:hover {
+      transform: scale(1.05);
+    }
+    #game-over {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: red;
+      margin-top: 30px;
+      display: none;
+    }
+    #restart-button {
+      display: none;
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #restart-button:hover {
+      background-color: #45a049;
+    }
+    #form-container {
+      margin-top: 40px;
+    }
+    #salva-button, #download-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #salva-button:hover, #download-button:hover {
+      background-color: #0056b3;
+    }
+    #download-button {
+      display: none;
+      margin-top: 20px;
+    }
+    #dati-salvati {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    #tempi-reazione {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Clicca sull'immagine giusta!</h1>
+
+  <div id="form-container">
+    <h2>Inserisci i tuoi dati</h2>
+    <input type="text" id="nome" placeholder="Nome">
+    <input type="text" id="cognome" placeholder="Cognome">
+    <button id="salva-button">Salva</button>
+  </div>
+
+  <div id="grid"></div>
+
+  <p id="game-over">Gioco finito! Hai cliccato sull'immagine sbagliata.</p>
+  <button id="restart-button">Riparti</button>
+  <button id="download-button">Scarica Dati</button>
+
+  <p id="dati-salvati"></p>
+  <p id="tempi-reazione">Tempi di reazione: </p>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const gameOverDisplay = document.getElementById('game-over');
+    const restartButton = document.getElementById('restart-button');
+    const downloadButton = document.getElementById('download-button');
+    const salvaButton = document.getElementById('salva-button');
+    const nomeInput = document.getElementById('nome');
+    const cognomeInput = document.getElementById('cognome');
+    const datiSalvatiDisplay = document.getElementById('dati-salvati');
+    const tempiReazioneDisplay = document.getElementById('tempi-reazione');
+
+    let gameRunning = false;
+    let datiArray = [];
+    let startTime = 0;
+    let tempiReazione = [];
+    let intervalId = null;
+
+    const imageLinks = [
+      "https://www.stickersmurali.com/it/img/asfs1748-jpg/folder/products-listado-merchant/adesivi-juventus-di-torino.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSraV-3CA0tXAgSFMPSkKeJCCZPV9aWelBrCA&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLiTCuQpHuJ2TMQ-By_A28Novm3qwWTgHrvw&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjF59iyaRDsVxsjsiMymSYcs3djkw21DW5qw&s",
+      "https://pbs.twimg.com/media/GrqfyaBWIAA4o82.jpg",
+      "https://net-storage.tcccdn.com/storage/fcinternews.it/img_notizie/thumb3/aa/aa9b9c06bac421e2bbc51cc5cc259966-13416-oooz0000.jpg"
+    ];
+
+    const targetImage = "https://www.informazionequotidiana.it/wp-content/uploads/2025/06/Immagine-62.jpeg";
+
+    function generateGrid() {
+      if (!gameRunning) return;
+      grid.innerHTML = '';
+
+      const imagesToShow = [targetImage];
+      while (imagesToShow.length < 9) {
+        const randomImg = imageLinks[Math.floor(Math.random() * imageLinks.length)];
+        imagesToShow.push(randomImg);
+      }
+
+      const shuffledImages = imagesToShow.sort(() => 0.5 - Math.random());
+      startTime = Date.now();
+
+      shuffledImages.forEach(imgUrl => {
+        const img = document.createElement('img');
+        img.src = imgUrl;
+        img.classList.add('img-square');
+        img.addEventListener('click', () => handleClick(imgUrl === targetImage, Date.now()));
+        grid.appendChild(img);
+      });
+    }
+
+    function handleClick(isCorrect, clickTime) {
+      if (!isCorrect) {
+        gameRunning = false;
+        clearInterval(intervalId);
+        gameOverDisplay.style.display = 'block';
+        restartButton.style.display = 'block';
+      } else {
+        const reactionTime = (clickTime - startTime) / 1000;
+        tempiReazione.push(reactionTime);
+        tempiReazioneDisplay.textContent = `Tempi di reazione: ${tempiReazione.map(t => t.toFixed(2)).join(', ')} s`;
+
+        const currentUser = datiArray[datiArray.length - 1];
+        if (currentUser) currentUser.tempiReazione.push(reactionTime);
+      }
+    }
+
+    function restartGame() {
+      gameRunning = true;
+      gameOverDisplay.style.display = 'none';
+      restartButton.style.display = 'none';
+      tempiReazione = [];
+      tempiReazioneDisplay.textContent = 'Tempi di reazione: ';
+      startImageLoop();
+    }
+
+    function startImageLoop() {
+      generateGrid();
+      intervalId = setInterval(generateGrid, 1500);
+    }
+
+    function downloadData() {
+      const dataBlob = new Blob([JSON.stringify(datiArray, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(dataBlob);
+      link.download = 'dati_utente.json';
+      link.click();
+    }
+
+    salvaButton.addEventListener('click', () => {
+      const nome = nomeInput.value.trim();
+      const cognome = cognomeInput.value.trim();
+
+      if (nome && cognome) {
+        gameRunning = true;
+        const nuovoUtente = { nome, cognome, tempiReazione: [] };
+        datiArray.push(nuovoUtente);
+        datiSalvatiDisplay.textContent = `Nome: ${nome}, Cognome: ${cognome}`;
+        nomeInput.value = '';
+        cognomeInput.value = '';
+        downloadButton.style.display = 'block';
+        startImageLoop();
+      } else {
+        alert('Inserisci entrambi i valori!');
+      }
+    });
+
+    restartButton.addEventListener('click', restartGame);
+    downloadButton.addEventListener('click', downloadData);
+  </script>
+</body>
+</html>

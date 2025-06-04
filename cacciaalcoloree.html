@@ -14,13 +14,19 @@
     h1 {
       font-size: 2rem;
     }
+    #istruzioni {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+      margin-top: 10px;
+    }
     #grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      grid-template-columns: repeat(3, 1fr); /* 3 per riga */
       grid-gap: 15px;
       justify-content: center;
       margin: 30px auto;
-      max-width: 800px;
+      max-width: 600px;
     }
     .img-square {
       width: 100%;
@@ -89,6 +95,7 @@
 </head>
 <body>
   <h1>Clicca sull'immagine giusta!</h1>
+  <p id="istruzioni">Clicca sull'immagine della Juventus</p>
 
   <div id="form-container">
     <h2>Inserisci i tuoi dati</h2>
@@ -116,6 +123,7 @@
     const cognomeInput = document.getElementById('cognome');
     const datiSalvatiDisplay = document.getElementById('dati-salvati');
     const tempiReazioneDisplay = document.getElementById('tempi-reazione');
+    const istruzioni = document.getElementById('istruzioni');
 
     let gameRunning = false;
     let datiArray = [];
@@ -124,15 +132,18 @@
     let intervalId = null;
 
     const imageLinks = [
-      "https://www.stickersmurali.com/it/img/asfs1748-jpg/folder/products-listado-merchant/adesivi-juventus-di-torino.jpg",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSraV-3CA0tXAgSFMPSkKeJCCZPV9aWelBrCA&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLiTCuQpHuJ2TMQ-By_A28Novm3qwWTgHrvw&usqp=CAU",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjF59iyaRDsVxsjsiMymSYcs3djkw21DW5qw&s",
-      "https://pbs.twimg.com/media/GrqfyaBWIAA4o82.jpg",
-      "https://net-storage.tcccdn.com/storage/fcinternews.it/img_notizie/thumb3/aa/aa9b9c06bac421e2bbc51cc5cc259966-13416-oooz0000.jpg"
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Juventus_FC_2017_logo.svg/1200px-Juventus_FC_2017_logo.svg.png", // Juventus
+      "https://upload.wikimedia.org/wikipedia/commons/0/0c/Milan.png", // Milan
+      "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg", // Inter
+      "https://upload.wikimedia.org/wikipedia/commons/4/4c/AS_Roma_logo_2017.svg", // Roma
+      "https://upload.wikimedia.org/wikipedia/commons/8/89/SSC_Neapel.svg", // Napoli
+      "https://upload.wikimedia.org/wikipedia/commons/2/2e/ACF_Fiorentina_2.svg", // Fiorentina
+      "https://upload.wikimedia.org/wikipedia/commons/6/60/Atalanta_BC_crest_2019.svg", // Atalanta
+      "https://upload.wikimedia.org/wikipedia/en/e/e1/Udinese_Calcio_2010_logo.png", // Udinese
+      "https://upload.wikimedia.org/wikipedia/en/4/4e/Lazio_Rome.svg" // Lazio
     ];
 
-    const targetImage = "https://www.informazionequotidiana.it/wp-content/uploads/2025/06/Immagine-62.jpeg";
+    const targetImage = imageLinks[0]; // Juventus
 
     function generateGrid() {
       if (!gameRunning) return;
@@ -141,7 +152,9 @@
       const imagesToShow = [targetImage];
       while (imagesToShow.length < 9) {
         const randomImg = imageLinks[Math.floor(Math.random() * imageLinks.length)];
-        imagesToShow.push(randomImg);
+        if (!imagesToShow.includes(randomImg)) {
+          imagesToShow.push(randomImg);
+        }
       }
 
       const shuffledImages = imagesToShow.sort(() => 0.5 - Math.random());
